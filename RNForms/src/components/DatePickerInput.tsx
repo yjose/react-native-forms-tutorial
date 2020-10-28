@@ -40,7 +40,8 @@ export const DatePickerInput = ({
     <Pressable onPress={() => setIsOpen(true)}>
       <View style={styles.container}>
         {label && <Text style={[styles.label]}>{label}</Text>}
-        <View style={styles.input}>
+        <View
+          style={[styles.input, {borderColor: error ? '#fc6d47' : '#c0cbd3'}]}>
           <Text style={styles.text}>{value ? value : 'YYYY-MM-DD'} </Text>
           <DateTimePickerModal
             isVisible={isOpen}

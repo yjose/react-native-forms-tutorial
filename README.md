@@ -6,7 +6,7 @@ Through My 2 years experience As a react native developer, I used to use differe
 
 This tutorial is a step-by-step tutorial to create a generic form component with multiple input type (text, select, date picker ...) that can be used whenever you need to deal with forms.
 
-> if you are impatient and want to go straight to the code, you can play around with the solution in this [Snack Editor Project](https://snack.expo.io/@yjose/form-in-react-native,-the-right-way!-). 😀
+> if you are impatient and want to go straight to the code, you can play around with the solution in `RNForm` folder.
 
 ## Approach
 

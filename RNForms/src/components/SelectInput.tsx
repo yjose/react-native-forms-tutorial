@@ -21,7 +21,8 @@ export const SelectInput = ({name, label, setValue, watch, error}: Props) => {
   return (
     <View style={styles.container}>
       {label && <Text style={[styles.label]}>{label}</Text>}
-      <View style={styles.input}>
+      <View
+        style={[styles.input, {borderColor: error ? '#fc6d47' : '#c0cbd3'}]}>
         <RNPickerSelect
           style={pickerSelectStyles}
           onValueChange={(v) => setValue(name, v, {shouldValidate: true})}
@@ -71,18 +72,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-function formatDate(date: string) {
-  let d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-
-  return [year, month, day].join('-');
-}
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
