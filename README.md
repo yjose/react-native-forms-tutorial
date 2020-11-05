@@ -237,7 +237,7 @@ export default ({
 
 Our Last step is To Use [react-native-keyboard-aware-scroll-view](https://github.com/APSL/react-native-keyboard-aware-scroll-view) component that handles keyboard appearance and automatically scrolls to focused TextInput.
 
-Yep! Our Form Component is Ready for Production 😎And you can play around with it in this[Snack Editor Project](https://snack.expo.io/@yjose/form-in-react-native,-the-right-way!-).
+Yep! Our Form Component is Ready for Production 😎 And you can play around with it in the `RNForms` demo files.
 
 ```ts
 //App.tsx
@@ -271,7 +271,153 @@ export default () => {
 };
 ```
 
+## Bonus 💎
 
+I received multiple requests on how we can handle custom form input such us select input or even a Birth Date input, Here is How 😉👇👇
+
+```jsx
+// DatePickerInput.tsx
+import React, { useState } from "react";
+import { Pressable } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { FieldError } from "react-hook-form";
+import { View, Text, StyleSheet, TextInputProps } from "react-native";
+
+type ValueOptions = {
+  shouldValidate?: boolean,
+};
+
+interface Props {
+  name: string;
+  label: string;
+  setValue: (name: string, value: string, options?: ValueOptions) => void;
+  watch: any;
+  error?: FieldError | undefined;
+}
+
+export const DatePickerInput = ({
+  name,
+  label,
+  setValue,
+  watch,
+  error,
+}: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const value = watch(name);
+
+  const hideDatePicker = () => {
+    setIsOpen(false);
+  };
+
+  const handleConfirm = (date: any) => {
+    const d = formatDate(date);
+    setValue(name, d, { shouldValidate: true });
+    hideDatePicker();
+  };
+
+  return (
+    <Pressable onPress={() => setIsOpen(true)}>
+      <View style={styles.container}>
+        {label && <Text style={[styles.label]}>{label}</Text>}
+        <View
+          style={[styles.input, { borderColor: error ? "#fc6d47" : "#c0cbd3" }]}
+        >
+          <Text style={styles.text}>{value ? value : "YYYY-MM-DD"} </Text>
+          <DateTimePickerModal
+            isVisible={isOpen}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+        </View>
+        <Text style={styles.textError}>{error && error.message}</Text>
+      </View>
+    </Pressable>
+  );
+};
+
+function formatDate(date: string) {
+  let d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
+```
+
+```jsx
+// SelectInput.tsx
+import React from "react";
+import RNPickerSelect from "react-native-picker-select";
+import { FieldError } from "react-hook-form";
+import { View, Text, StyleSheet, TextInputProps } from "react-native";
+
+type ValueOptions = {
+  shouldValidate?: boolean,
+};
+
+interface Props extends TextInputProps {
+  name: string;
+  label: string;
+  setValue: (name: string, value: string, options?: ValueOptions) => void;
+  watch: any;
+  error?: FieldError | undefined;
+}
+
+export const SelectInput = ({ name, label, setValue, watch, error }: Props) => {
+  const value = watch(name);
+  return (
+    <View style={styles.container}>
+      {label && <Text style={[styles.label]}>{label}</Text>}
+      <View
+        style={[styles.input, { borderColor: error ? "#fc6d47" : "#c0cbd3" }]}
+      >
+        <RNPickerSelect
+          style={pickerSelectStyles}
+          onValueChange={(v) => setValue(name, v, { shouldValidate: true })}
+          items={[
+            { label: "Female", value: "female" },
+            { label: "Male", value: "male" },
+            { label: "Other", value: "other" },
+          ]}
+        />
+      </View>
+      <Text style={styles.textError}>{error && error.message}</Text>
+    </View>
+  );
+};
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    borderStyle: "solid",
+    borderRadius: 5,
+    // paddingVertical: 5,
+    paddingLeft: 5,
+    fontSize: 16,
+    height: 40,
+    color: "#c0cbd3",
+    borderColor: "#c0cbd3",
+    justifyContent: "center",
+  },
+  inputAndroid: {
+    borderStyle: "solid",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingLeft: 5,
+    fontSize: 16,
+    height: 40,
+    color: "#c0cbd3",
+    borderColor: "#c0cbd3",
+    justifyContent: "center",
+  },
+});
+```
+
+I hope you found that interesting, informative, and entertaining. Happy coding !
 
 ## Licensing
 
